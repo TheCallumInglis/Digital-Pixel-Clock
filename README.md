@@ -1,7 +1,8 @@
 # Digital Pixel Clock
+Insipired by Destin's wall clock as seen in the background of almost every [Smarter Every Day](https://www.youtube.com/@smartereveryday) video.
 
 ## Creating secret.h
-Within your DigitalPixelClock directory, create a `secret.h` header file.  
+Within your `DigitalPixelClock` directory, create a `secret.h` header file.  
 
 Populate as follows:
 ```c++
