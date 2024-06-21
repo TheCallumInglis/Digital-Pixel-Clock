@@ -55,7 +55,23 @@ bool getTime(char (&timestr)[4]) {
   Serial.println("[TIME] :: Getting the time now...");
 
   if (time_client.update() || time_client.isTimeSet()) {
-    strcpy(timestr, DateTime(time_client.getEpochTime()).toString(format));
+    time_t epochTime = time_client.getEpochTime();
+
+    // Adjust for British Summer Time (BST)
+    time_t adjustedTime = epochTime;
+    tmElements_t tm;
+    breakTime(epochTime, tm);
+
+    // Check if it's within the BST period (last Sunday in March to last Sunday in October)
+    if ((tm.Month > 3 && tm.Month < 10) || 
+        (tm.Month == 3 && (tm.Day - tm.Wday) >= 24) ||
+        (tm.Month == 10 && (tm.Day - tm.Wday) < 24)) {
+      adjustedTime += 3600;  // Add one hour for BST
+    }
+
+    strcpy(timestr, DateTime(adjustedTime).toString(format));
+
+    //strcpy(timestr, DateTime(time_client.getEpochTime()).toString(format));
     Serial.print("[TIME] :: Time Updated. It is now "); Serial.println(timestr);
     return true;
 
